@@ -10,12 +10,27 @@ namespace RogueDungeon0125
     {
         static void Main(string[] args)
         {
+            //статы и начальная позиция
             Console.OutputEncoding = Encoding.Unicode;
             int playerHealth = 100, maxHealth = 100, gold = 0,
-                posX = 0, posY = 0;
-            //для карты
+                posX = 0, posY = 3;
+
+            // считывание и обработка данных (урон)
+            int enemyDamage;
+            Console.Write("Введите урон противника: ");
+            int.TryParse(Console.ReadLine(), out enemyDamage);
+            playerHealth -= enemyDamage;
+            if (playerHealth < 0)
+            {
+                playerHealth = 0;
+            }
+            Console.SetCursorPosition(0, 3);
+            
+
+            //переменные для поля
             int mapWidth = 10, mapHeight = 10, playerInputPosition = 15,
                 hudCursorPosition = 13;
+
             // вывод игрового поля
             for (int i = 0; i < mapHeight; i++)
             {
@@ -31,20 +46,10 @@ namespace RogueDungeon0125
             Console.Write("H");
             Console.ResetColor();
             Console.SetCursorPosition(0, hudCursorPosition);
+
             // вывод строки состояния
             Console.WriteLine($"♥️[{playerHealth}/{maxHealth}] ${gold, -5}");
-
-            // считывание и обработка данных
-            //int enemyDamage;
-            //Console.Write("Введите урон противника: ");
-            //int.TryParse(Console.ReadLine(), out enemyDamage);
-            //playerHealth -= enemyDamage;
-            //if (playerHealth < 0)
-            //{
-            //    playerHealth = 0;
-            //}
-            //Console.SetCursorPosition(0, 3);
-            //Console.WriteLine($"♥️[{playerHealth}/{maxHealth}] ${gold, -5}");
+            
             // передвижение игрока
             while (true)
             {
@@ -63,7 +68,7 @@ namespace RogueDungeon0125
                         break;
                     //down
                     case ConsoleKey.S:
-                        if (posY == mapWidth - 1)
+                        if (posY-3 == mapWidth - 1)//поле сдвинуто на три строки вниз, добавил такой же шаг в границы
                             continue;
                         stepY += 1;
                         break;
@@ -75,11 +80,13 @@ namespace RogueDungeon0125
                         break;
                     //up
                     case ConsoleKey.W:
-                        if (posY == 0)
+                        if (posY-3 == 0)//поле сдвинуто на три строки вниз, добавил такой же шаг в границы
                             continue;
                         stepY -= 1;
                         break;
                 }
+
+                //вывод положения игрока по имеющимся данным после проверки клавиши
                 Console.SetCursorPosition(posX, posY);
                 Console.Write("#");
                 posX += stepX;
